@@ -1,1 +1,1 @@
-django-password-token-expiration
+password-token-expiration
