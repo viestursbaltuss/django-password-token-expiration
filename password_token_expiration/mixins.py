@@ -13,7 +13,6 @@ class PasswordTokenMixin(models.Model):
     password_token_expiration_date = models.DateTimeField(('password_token_expiration_date'), default=timezone.now)
     password_token = models.TextField(null=True)
     def set_password_token(self):
-        # ensuring its gonna be unique over time
         while True:
             allowed_chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
             t = int( time() )
@@ -27,41 +26,14 @@ class PasswordTokenMixin(models.Model):
             user = queryset.filter(password_token=key).first()
             if not user:
                 break
-
-
-        self.password_token_expiration_date = datetime.datetime.now() + timedelta(seconds = 5)
-        if datetime.datetime.now() > self.password_token_expiration_date:
-            raise self.password_token = None
-        #self ...... = now() + settings.MY_CONSTANT_IN_SECONDS
+        self.password_token_expiration_date = datetime.datetime.now() + timedelta(days=2)
         self.password_token = key
-    
     def unset_password_token(self):
-        # ensuring its gonna be unique over time
         self.password_token = None
-    # def expire_password_token(self, key):
-    #     utc_now = datetime.datetime.utcnow()
-    #     if token.created < utc_now - datetime.timedelta(seconds=20):
-    #         self.password_token = None
+
     def get_password_token(self):
         return self.password_token
+   
 
     class Meta:
         abstract = True
-
-
-
-# class PasswordTokenMixin(models.Model):
-#     # password_token_expiration_date = models.DateTimeField(null=True)
-
-#         # default=timezone.now() + timedelta(days=2),
-#         # help_text=('Token expiration date'),
-    
-#     def token_expiration_date(self):
-#         default=timezone.now() + timedelta(days=2)
-    # password_token_expiration_date = models.DateTimeField(
-    # default=timezone.now()+timedelta(days=2),
-    # help_text=('Token expiration date'),
-    # )
-
-
-    # def token_expiration_date(self):
